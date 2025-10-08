@@ -3,73 +3,76 @@ using System;
 
 public partial class Game : Node2D
 {
-	private static readonly PackedScene MAIN_SCENE = GD.Load<PackedScene>("res://UI/Main/Main.tscn");
-
 	[Export] private Marker2D _spawnUpper;
 	[Export] private Marker2D _spawnLower;
-	[Export] private Node2D _pipesHolder;
+	//[Export] private Node2D _pipesHolder;
 	[Export] private Timer _spawnTimer;
 	[Export] private PackedScene _pipesScene;
-	[Export] private Plane _plane;
+	// [Export] private Plane _plane;
 
-	
 	private bool _gameOver = false; 
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_spawnTimer.Timeout += SpawnPipes;
-		_plane.OnPlaneDied += GameOver;
+		SignalManager.Instance.OnPlaneDied += GameOver;
+
+		ScoreManager.ResetScore();
 
 		SpawnPipes();
 		//GD.Print($"{GetSpawnY()}");
 	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+	public override void _ExitTree()
 	{
-		if(Input.IsActionJustPressed("fly") && _gameOver)
-		{
-			ChangeToMain();
-		}
-
-		if(Input.IsKeyPressed(Key.Q))
-		{
-			ChangeToMain();
-			
-		}
-	}
-
-	private void ChangeToMain()
-	{
-		GetTree().ChangeSceneToPacked(MAIN_SCENE);
-	}
-
-	public float GetSpawnY()
-	{
-		return (float)GD.RandRange(_spawnUpper.Position.Y, _spawnLower.Position.Y);
+		SignalManager.Instance.OnPlaneDied -= GameOver;
 	}
 
 	private void StopPipes()
 	{
 		_spawnTimer.Stop();
-		foreach (Pipes pipe in _pipesHolder.GetChildren())
-		{
-			pipe.SetProcess(false);
-		}
+		// REFEREMCE ONLY 
+		// foreach (Pipes pipe in _pipesHolder.GetChildren())
+		//{
+		//	pipe.SetProcess(false);
+		// }
 	}
 
 	private void GameOver()
 	{
-		//GD.Print("GameOver");
+		GD.Print("GameOver");
 		StopPipes();
 		_gameOver = true;
 	}
-
+	private void ChangeToMain()
+	{
+		GameManager.LoadMain();
+	}
+	public float GetSpawnY()
+	{
+		return (float)GD.RandRange(_spawnUpper.Position.Y, _spawnLower.Position.Y);
+	}
 	private void SpawnPipes()
 	{
 		Pipes np = _pipesScene.Instantiate<Pipes>();
-		_pipesHolder.AddChild(np);
+		AddChild(np);
 		np.Position = new Vector2(_spawnLower.Position.X, GetSpawnY());
 	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+		if (Input.IsActionJustPressed("fly") && _gameOver)
+		{
+			ChangeToMain();
+		}
+
+		if (Input.IsKeyPressed(Key.Q))
+		{
+			ChangeToMain();
+		}
+	}
+
+
 }
