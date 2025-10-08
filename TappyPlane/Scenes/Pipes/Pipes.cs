@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 
 public partial class Pipes : Node2D
@@ -17,10 +18,23 @@ public partial class Pipes : Node2D
 		_lowerPipe.BodyEntered += OnPipeBodyEntered;
 		_upperPipe.BodyEntered += OnPipeBodyEntered;
 		_laser.BodyEntered += OnLaserBodyEntered;
+
+		SignalManager.Instance.OnPlaneDied += OnPlaneDied;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+    public override void _ExitTree()
+    {
+		SignalManager.Instance.OnPlaneDied -= OnPlaneDied;
+	}
+
+
+	private void OnPlaneDied()
+	{
+		SetProcess(false);
+	}
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
 	{
 		Position -= new Vector2(SCROLL_SPEED * (float)delta, 0.0f);
 	}
@@ -38,8 +52,8 @@ public partial class Pipes : Node2D
 		}
 	}
 	private void OnLaserBodyEntered(Node2D body)
-	{
-		GD.Print("Scored");
+	{   // REFE
+		//GD.Print("Scored");
+		ScoreManager.IncrementScore();
 	}
-
 }
