@@ -9,6 +9,7 @@ public partial class Plane : CharacterBody2D
 
 	[Export] private AnimatedSprite2D _planeSprite;
 	[Export] private AnimationPlayer _animationPlayer;
+	[Export] private AudioStreamPlayer _engineSound;
 
 	public override void _Ready()
 	{
@@ -40,6 +41,7 @@ public partial class Plane : CharacterBody2D
 	{
 		SetPhysicsProcess(false);
 		_planeSprite.Stop();
+		_engineSound.Stop();
 		GD.Print("Die");
 		//EmitSignal(SignalName.OnPlaneDied);
 		SignalManager.EmitOnPlaneDied();

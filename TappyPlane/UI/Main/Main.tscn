@@ -2,10 +2,13 @@
 
 [ext_resource type="Texture2D" uid="uid://bupsd5c26myr6" path="res://Assets/background/sky.png" id="1_ggmuk"]
 [ext_resource type="Script" uid="uid://dlpqk0kep5okd" path="res://UI/Main/Main.cs" id="1_iyolv"]
-[ext_resource type="LabelSettings" uid="uid://ccra3bmoi4f3b" path="res://Resources/LG_72_RED.tres" id="2_g6qth"]
-[ext_resource type="LabelSettings" uid="uid://mh0y2y23v3gp" path="res://Resources/LG_48_WHITE.tres" id="3_k638e"]
-[ext_resource type="LabelSettings" uid="uid://bxwsckaa46qpl" path="res://Resources/LG_24_RED.tres" id="4_iyolv"]
+[ext_resource type="LabelSettings" uid="uid://ccra3bmoi4f3b" path="res://Resources/Art/LG_72_RED.tres" id="2_g6qth"]
+[ext_resource type="LabelSettings" uid="uid://mh0y2y23v3gp" path="res://Resources/Art/LG_48_WHITE.tres" id="3_k638e"]
+[ext_resource type="LabelSettings" uid="uid://dcmdiucmer50" path="res://Resources/Art/LG_48_RED.tres" id="5_iyolv"]
 [ext_resource type="AudioStream" uid="uid://cqx1concis1x3" path="res://Assets/audio/bgm_menu.mp3" id="5_k638e"]
+
+[sub_resource type="Animation" id="Animation_iyolv"]
+length = 0.001
 
 [sub_resource type="Animation" id="Animation_k638e"]
 resource_name = "flash"
@@ -24,16 +27,13 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.0117647), Color(1, 1, 1, 0.0666667), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_iyolv"]
-length = 0.001
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ls3py"]
 _data = {
 &"RESET": SubResource("Animation_iyolv"),
 &"flash": SubResource("Animation_k638e")
 }
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" node_paths=PackedStringArray("_highScoreLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,6 +41,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iyolv")
+_highScoreLabel = NodePath("MC/HighScoreLabel")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -75,7 +76,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PressSpaceLabel" type="Label" parent="MC"]
-self_modulate = Color(1, 1, 1, 0.57963)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "PRESS SPACE 
@@ -90,7 +90,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 text = "HIGHSCORE"
-label_settings = ExtResource("4_iyolv")
+label_settings = ExtResource("5_iyolv")
 vertical_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="MC"]
@@ -98,7 +98,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "0000"
-label_settings = ExtResource("4_iyolv")
+label_settings = ExtResource("5_iyolv")
 horizontal_alignment = 2
 vertical_alignment = 1
 
