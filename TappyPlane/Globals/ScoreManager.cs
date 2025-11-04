@@ -1,15 +1,13 @@
 using Godot;
-using Godot.NativeInterop;
 using System;
 
 public partial class ScoreManager : Node
 {
-	private uint _score = 0;
-	private uint _highScore = 0;
+	const int DEFAULT_SCORE = 1000;
 
-	private const string SCORE_FILE = "user://TappyPlane.save";
 	public static ScoreManager Instance { get; private set; }
 
+	private int _levelSelected;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,58 +15,18 @@ public partial class ScoreManager : Node
 		Instance = this;
 	}
 
-    public override void _ExitTree()
+	public static int GetLevelSelected()
+	{
+		return Instance._levelSelected;
+	}
+
+	public static int SetLevelSelected(int Level)
+	{
+		return Instance._levelSelected = Level;
+	}
+	
+	public static int GetLevelBestScore()
     {
-		SaveScoreToFile();
-	}
-
-
-	public static uint GetScore()
-	{
-		return Instance._score;
-	}
-
-	public static uint GetHighScore()
-	{
-		return Instance._highScore;
-	}
-
-	public static void SetScore(uint value)
-	{
-		Instance._score = value;
-		if (Instance._score > Instance._highScore)
-		{
-			Instance._highScore = Instance._score;
-		}
-		GD.Print($"Score: {Instance._score}, High Score: {Instance._highScore}");
-		SignalManager.EmitOnScored();
-	}
-
-
-	public static void ResetScore()
-	{
-		SetScore(0);
-	}
-
-	public static void IncrementScore()
-	{
-		SetScore(GetScore() + 1);
-	}
-
-	private void LoadScoreFromFile()
-	{
-		using FileAccess file = FileAccess.Open(SCORE_FILE, FileAccess.ModeFlags.Read);
-		if (file != null)
-		{
-			_highScore = file.Get32();
-		}
-	}
-	private void SaveScoreToFile()
-	{
-		using FileAccess file = FileAccess.Open(SCORE_FILE, FileAccess.ModeFlags.Write);
-		if (file != null)
-		{
-			file.Store32(_highScore);
-		}
-	}
+		return DEFAULT_SCORE;
+    }
 }
